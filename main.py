@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import pandas as pd
 import joblib
 from sqlalchemy import create_engine
+from mangum import Mangum
 
 # Load the trained model
 model = joblib.load('models/xgb_model-tuned.joblib')
@@ -22,6 +23,7 @@ class SalesInput(BaseModel):
     Unemployment: float
 
 app = FastAPI()
+handler = Mangum(app)
 
 def get_previous_sales(store):
     # Query the database for the last two weeks of sales for the given store
@@ -64,7 +66,7 @@ def apply_feature_engineering(input_data):
 
     return df
 
-@app.post("/predict")
+@app.post("/predict_sales")
 async def predict_sales(input_data: SalesInput):
     # Convert the Pydantic input data to dictionary 
     input_dict = input_data.model_dump()
@@ -80,11 +82,34 @@ async def predict_sales(input_data: SalesInput):
     prediction = (prediction_xb[0] + prediction_rf[0]) / 2
 
     # Insert row to SQL database with input_data and prediction
-    input_data['Weekly_Sales'] = prediction
+    input_dict['Weekly_Sales'] = prediction
     features = ['Store', 'Date', 'Weekly_Sales', 'Holiday_Flag', 'Temperature', 'Fuel_Price', 'CPI', 'Unemployment']
-    df_input = pd.DataFrame([input_data])[features]
+    df_input = pd.DataFrame([input_dict])[features]
     df_input.to_sql('walmart_sales', engine, if_exists='append', index=False)
     
     return {"prediction": round(prediction, 2)}
 
+@app.post("/forecast_sales")
+async def predict_sales_arima(store_id: int, steps: int = 3):
+
+    # Load the saved ARIMA model for the store
+    model = joblib.load(f'models/forecast_models/arima_model_store_{store_id}.joblib')
+
+    # Forecast the next 'steps' weeks
+    predictions = model.forecast(steps=steps)  
+
+    # Convert the forecast to a DataFrame for easier formatting
+    predicted_sales_df = predictions.to_frame(name='Sales').reset_index()
+    predicted_sales_df.columns = ['Date', 'Sales']
+
+    # Format the date and sales values
+    predicted_sales_df['Date'] = predicted_sales_df['Date'].dt.strftime('%d-%m-%Y')
+    predicted_sales_df['Sales'] = predicted_sales_df['Sales'].apply(lambda x: f"{x:.2f}")
+
+    # Convert the DataFrame to a list of dictionaries for JSON response
+    forecast = predicted_sales_df.to_dict(orient='records')
+
+    return {"predictions": forecast}
+
+# fastapi run main.py
 # uvicorn main:app --reload
