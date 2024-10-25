@@ -1,8 +1,17 @@
 # Sales Forecasting API using Regression
 This API provides weekly sales forecasts for a store chain based on historical time series data. It leverages a combination of machine learning and statistical models to make accurate predictions and forecasts. The models are deployed as a Docker container on AWS Elastic Container Service (ECS) and are accessible via a public API endpoint.
 
+**Default Run:**
+```bash
+fastapi run main.py
+```
+
+```bash
+uvicorn main:app --reload
+```
+
 ## Dataset
-- Store - Unique number ID for each store.
+- Store - Unique number ID for each store (42 stores total).
 - Date - Date of the recorded sales.
 - Weekly_Sales - Total sales for the week at the specific store.  
 - Holiday_Flag - Indicates whether the week includes a holiday (1 if yes, 0 if no). 
@@ -13,13 +22,29 @@ This API provides weekly sales forecasts for a store chain based on historical t
 
 <img width="584" alt="image" src="https://github.com/user-attachments/assets/7475c1cf-be0e-4fda-99b2-2d76f807c91c">
 <img width="583" alt="image" src="https://github.com/user-attachments/assets/b9603af1-d2a5-4bae-9db0-5be10bbaadf4">
+<img width="478" alt="image" src="https://github.com/user-attachments/assets/d1aff3aa-0641-4fd5-9d39-071fb2fb88c3">
 
 ## Preprocessing 
+- Convert Date feature to datetime format and indexed for timeseries.
+- Feature engineering lagged features of weekly sales capturing temporal dependencies from past two weeks.
+- Split Date into day of the week, month and week of the year features for the regression the models to factor temporal dependencies.
+- One-hot Encoding applied to the Store feature as binary features for the regression models to consider relationship with stores without assuming ordinality. 
 
 ## Models 
-This API combines multiple models to improve accuracy and provide robust predictions:
-- **Random Forest** and **XGBoost**: These regression models are both used to predict weekly sales based on features related to each store. The API takes the average of their predictions to provide a final weekly sales estimate.
-- **ARIMA**: This statistical model is used for forecasting future sales over a specified period, capturing trends and seasonality in the time series data to generate accurate multi-step forecasts.
+**Random Forest** and **XGBoost**:<br>
+These tree-based regression models are both trained with hyperparameter tuning to predict weekly sales based on features related to each store. The API takes the average of their predictions to provide a final weekly sales estimate.
+
+<img width="583" alt="image" src="https://github.com/user-attachments/assets/48da8164-f4e6-47b9-9aff-03d9c85189c5">
+<img width="565" alt="image" src="https://github.com/user-attachments/assets/2b59dee6-3ab2-4b53-918d-cbe58f6aa09f">
+<img width="563" alt="image" src="https://github.com/user-attachments/assets/42921e2e-2fe8-437c-987e-4c1fdd5c134f">
+
+**LSTM (Long Short-Term Memory)**:<br>
+This recurrent neural network that captures long-term dependencies when predicting weekly sales for each store. The model was exculed in the API due to overfitting and computational complexity compared to the tree-based models. 
+
+<img width="467" alt="image" src="https://github.com/user-attachments/assets/d854dcbe-053f-4368-8f70-5f181b4a15be">
+
+**ARIMA (Auto-Regressive Integrated Moving Average)**:<br>
+This statistical model is used for forecasting future sales over a specified period, capturing trends and seasonality in the time series data to generate multi-step forecasts. The model is univariate focusing on the change in weekly sales instead of the other features. 
 
 ## API Endpoints
 The API provides the following endpoints:
