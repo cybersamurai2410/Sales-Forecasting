@@ -1,5 +1,5 @@
-# Sales Forecasting API using Regression
-This API provides weekly sales forecasts for a store chain based on historical time series data. It leverages a combination of machine learning and statistical models to make accurate predictions and forecasts. The models are deployed as a Docker container on AWS Elastic Container Service (ECS) and are accessible via a public API endpoint.
+# Sales Forecasting API using MLOps
+This API provides weekly sales forecasts for a store chain based on historical time series data. It leverages a combination of machine learning and statistical models using regression to make accurate predictions and forecasts. The models are deployed as a Docker container on AWS Elastic Container Service (ECS) and are accessible via a public API endpoint.
 
 **Default Run:**
 ```bash
