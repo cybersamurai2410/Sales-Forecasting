@@ -1,0 +1,98 @@
+name: MLOps CI/CD Pipeline
+
+# Triggers for the workflow
+on:
+  push: # Trigger on push events
+    branches: [main] # Only run on the 'main' branch
+  pull_request: # Trigger on pull request events
+    branches: [main]
+
+# Global environment variables
+env:
+  AWS_REGION: us-west-2 # AWS region for the resources
+  ECR_REPOSITORY: sales-forecasting-repo # Name of the ECR repository
+  ECS_SERVICE: sales-forecasting-service # Name of the ECS service
+  ECS_CLUSTER: sales-forecasting-cluster # Name of the ECS cluster
+  CONTAINER_NAME: sales-forecasting-app # Name of the container inside ECS
+
+jobs:
+  # First job: Test the code
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # Check out the code from the repository
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          # Install Python dependencies for testing
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: |
+          # Run all unit tests using pytest
+          python -m pytest tests/unit_tests.py
+
+  # Second job: Deploy Infrastructure and Services
+  deploy-infra:
+    needs: test # Ensure tests pass before deploying infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # Check out the code from the repository
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies for infrastructure
+        run: |
+          # Install dependencies for the infrastructure scripts
+          python -m pip install --upgrade pip
+          pip install boto3
+
+      - name: Deploy ECS and MLflow Infrastructure
+        run: |
+          # Run the infrastructure deployment scripts
+          python aws_cloud_infra/infra.py
+          python aws_cloud_infra/mlflow_infra.py
+
+  # Third job: Build Docker image and deploy to ECS
+  build-and-deploy:
+    needs: deploy-infra # Ensure infrastructure is deployed before building and deploying the app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # Check out the code from the repository
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} # Access Key from GitHub secrets
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # Secret Key from GitHub secrets
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} # ECR registry URL
+          IMAGE_TAG: ${{ github.sha }} # Use the commit SHA as the image tag
+        run: |
+          # Build and push the Docker image to ECR
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      - name: Deploy Amazon ECS service
+        run: |
+          # Run the ECS deployment script to update the service
+          python aws_cloud_infra/infra.py
