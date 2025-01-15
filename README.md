@@ -1,9 +1,9 @@
 # Sales Forecasting API using Regression with MLOps
-This API provides weekly sales forecasts for a store chain based on historical time series data, leveraging machine learning and statistical regression models to deliver accurate predictions. 
-The project incorporates MLOps principles to ensure a streamlined and automated workflow for model development, deployment and monitoring. 
+This API provides weekly sales forecasts for a store chain based on historical time series data using ETL (Extract, Transform, Load) to leverage machine learning and statistical regression models to deliver accurate predictions. 
+The project incorporates MLOps principles to ensure a streamlined and automated workflow for model development including training and hyperparameter tuning, deployment and monitoring. 
 Models are trained and logged with MLflow server running on AWS EC2 instance with the artifacts stored in an AWS S3 bucket. 
-The API and models are containerized using Docker and deployed to AWS Elastic Container Service (ECS) with Elastic Container Registry (ECR); infrastructure provisioning and updates are automated with Python scripts using AWS Boto3 library. 
-The CI/CD pipeline is implemented via GitHub Actions; facilitates continuous automated testing, building, and deployment to ensure reliable and scalable operations.
+The API and models are containerized using Docker and deployed by being pushed to Elastic Container Registry (ECR) and orchestarted via AWS Elastic Container Service (ECS); infrastructure provisioning and updates are automated with Python scripts using AWS Boto3 library. 
+The CI/CD pipeline is implemented via GitHub Actions, which facilitates continuous automated testing, building and deployment. This architecture demonstrates scalable and automated infrastrutue for machine learning solutions with MLOps. 
 
 **File Structure:**
 * `aws_cloud_infra/`
