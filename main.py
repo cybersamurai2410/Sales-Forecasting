@@ -115,10 +115,10 @@ async def predict_sales(input_data: SalesInput):
         })
 
     # Insert row to SQL database with input_data and prediction
-    # input_dict['Weekly_Sales'] = prediction
-    # features = ['Store', 'Date', 'Weekly_Sales', 'Holiday_Flag', 'Temperature', 'Fuel_Price', 'CPI', 'Unemployment']
-    # df_input = pd.DataFrame([input_dict])[features]
-    # df_input.to_sql('walmart_sales', engine, if_exists='append', index=False)
+    input_dict['Weekly_Sales'] = prediction
+    features = ['Store', 'Date', 'Weekly_Sales', 'Holiday_Flag', 'Temperature', 'Fuel_Price', 'CPI', 'Unemployment']
+    df_input = pd.DataFrame([input_dict])[features]
+    df_input.to_sql('walmart_sales', engine, if_exists='append', index=False)
     
     return {"prediction": round(ensemble_prediction, 2)}
 
