@@ -2,19 +2,19 @@
 This API provides weekly sales forecasts for a store chain based on historical time series data. It leverages a combination of machine learning and statistical models using regression to make accurate predictions and forecasts. The models are deployed as a Docker container on AWS Elastic Container Service (ECS) and are accessible via a public API endpoint.
 
 **File Structure:**
-* aws_cloud_infra/
-  * infra.py - Automates the deployment of AWS ECS infrastructure for running the FastAPI application.
-  * mlflow_infra.py - Automates the deployment of AWS EC2, RDS, and S3 resources for hosting the MLflow server.
-* workflows/
-  * main.yml - Defines the CI/CD pipeline for testing, building, and deploying the application using GitHub Actions.
-* Dockerfile - Specifies the environment and dependencies for containerizing the FastAPI application.
-* README.md
-* client.py - Script for sending API requests to the FastAPI application for predictions.
-* database_loader.py - Load the sales data from the original CSV dataset into the SQLite dataset.
-* main.py - FastAPI application file handling prediction endpoints and integrating with MLflow.
-* sales-forecast.ipynb - Jupyter notebook for the machine learning pipeline including exploratory data analysis, training and evaluation of the sales forecasting models.
-* train.py - Script to automate training, evaluation, and logging of machine learning models to MLflow
-* unit_tests.py - Unit tests for the FastAPI application endpoints, including mocking for external dependencies.
+* `aws_cloud_infra/`
+  * `infra.py` - Automates the deployment of AWS ECS infrastructure for running the FastAPI application.
+  * `mlflow_infra.py` - Automates the deployment of AWS EC2, RDS, and S3 resources for hosting the MLflow server.
+* `workflows/`
+  * `main.yml` - Defines the CI/CD pipeline for testing, building, and deploying the application using GitHub Actions.
+* `Dockerfile` - Specifies the environment and dependencies for containerizing the FastAPI application.
+* `README.md`
+* `client.py` - Script for sending API requests to the FastAPI application for predictions.
+* `database_loader.py` - Load the sales data from the original CSV dataset into the SQLite dataset.
+* `main.py` - FastAPI application file handling prediction endpoints and integrating with MLflow.
+* `sales-forecast.ipynb` - Jupyter notebook for the machine learning pipeline including exploratory data analysis, training and evaluation of the sales forecasting models.
+* `train.py` - Script to automate training, evaluation, and logging of machine learning models to MLflow
+* `unit_tests.py` - Unit tests for the FastAPI application endpoints, including mocking for external dependencies.
 
 **Default Run:**
 ```bash
