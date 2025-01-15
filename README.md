@@ -1,5 +1,9 @@
 # Sales Forecasting API using Regression with MLOps
-This API provides weekly sales forecasts for a store chain based on historical time series data. It leverages a combination of machine learning and statistical models using regression to make accurate predictions and forecasts. The models are deployed as a Docker container on AWS Elastic Container Service (ECS) and are accessible via a public API endpoint.
+This API provides weekly sales forecasts for a store chain based on historical time series data, leveraging machine learning and statistical regression models to deliver accurate predictions. 
+The project incorporates MLOps principles to ensure a streamlined and automated workflow for model development, deployment and monitoring. 
+Models are trained and logged with MLflow server running on AWS EC2 instance with the artifacts stored in an AWS S3 bucket. 
+The API and models are containerized using Docker and deployed to AWS Elastic Container Service (ECS) with Elastic Container Registry (ECR); infrastructure provisioning and updates are automated with Python scripts using AWS Boto3 library. 
+The CI/CD pipeline is implemented via GitHub Actions; facilitates continuous automated testing, building, and deployment to ensure reliable and scalable operations.
 
 **File Structure:**
 * `aws_cloud_infra/`
@@ -16,13 +20,17 @@ This API provides weekly sales forecasts for a store chain based on historical t
 * `train.py` - Script to automate training, evaluation, and logging of machine learning models to MLflow
 * `unit_tests.py` - Unit tests for the FastAPI application endpoints, including mocking for external dependencies.
 
-**Default Run:**
+**Run Server Commands:**
 ```bash
 fastapi run main.py
 ```
 
 ```bash
 uvicorn main:app --reload
+```
+
+```bash
+mlflow server --host PUBLIC_IP --port 5000
 ```
 
 ## Dataset
