@@ -1,5 +1,5 @@
 # Sales Forecasting API using Regression with MLOps
-This API provides weekly sales forecasts for a store chain based on historical time series data leveraging machine learning and statistical regression models to deliver accurate predictions. The project incorporates MLOps principles to ensure a streamlined and automated workflow for model development including training and hyperparameter tuning, deployment and monitoring. Models are trained and logged with MLflow server running on AWS EC2 instance with the model versions, experiment runs and artifacts stored in an AWS S3 bucket. The API and models are containerized using Docker and deployed by being pushed to Elastic Container Registry (ECR) and orchestarted via AWS Elastic Container Service (ECS); infrastructure provisioning and updates are automated with Python scripts using AWS Boto3 library. The CI/CD pipeline is implemented via GitHub Actions, which facilitates continuous automated testing, building and deployment. This architecture demonstrates scalable and automated infrastrutue for machine learning solutions with MLOps. 
+This API provides weekly sales forecasts for a store chain based on historical time series data leveraging machine learning and statistical regression models to deliver accurate predictions. The project incorporates MLOps principles to ensure a streamlined and automated workflow for model development including training and hyperparameter tuning, deployment and monitoring. Models are trained and logged with MLflow server running on AWS EC2 instance with the model versions, experiment runs and artifacts stored in AWS S3 bucket and MySQL database via AWS RDS. The API and models are containerized using Docker and deployed by being pushed to Elastic Container Registry (ECR) and orchestarted via AWS Elastic Container Service (ECS); infrastructure provisioning and updates are automated with Python scripts using AWS Boto3 library. The CI/CD pipeline is implemented via GitHub Actions, which facilitates continuous automated testing, building and deployment. This architecture demonstrates scalable and automated infrastrutue for machine learning solutions with MLOps. 
 
 **File Structure:**
 * `aws_cloud_infra/`
@@ -26,7 +26,11 @@ uvicorn main:app --reload
 ```
 
 ```bash
-mlflow server --host PUBLIC_IP --port 5000
+mlflow server --host 127.0.0.1 --port 5000
+```
+
+```bash
+mlflow server --backend-store-uri mysql+pymysql://<username>:<password>@<rds-endpoint>/<db-name> --default-artifact-root s3://<bucket-name>/ --host 0.0.0.0 --port 5000
 ```
 
 ## Dataset
@@ -124,5 +128,10 @@ curl -X POST http://<public_ip>/forecast_sales \
 ]
 ```
 
-## MLflow Logs
-
+## MLflow UI
+<img width="1115" alt="Screenshot 2025-01-09 143431" src="https://github.com/user-attachments/assets/5a6dd112-1480-44c7-95aa-376b566810a3" />
+<img width="1357" alt="Screenshot 2025-01-09 143242" src="https://github.com/user-attachments/assets/4c40be8f-94d9-4d0f-ac46-f8fa529b67ad" />
+<img width="1354" alt="Screenshot 2025-01-09 143355" src="https://github.com/user-attachments/assets/fce1eddf-6b45-40c7-9fc4-ca248a2a74a6" />
+<img width="1321" alt="Screenshot 2025-01-09 143459" src="https://github.com/user-attachments/assets/bfa796be-ac6c-4677-a46e-65e6af930fa0" />
+<img width="1344" alt="Screenshot 2025-01-09 143533" src="https://github.com/user-attachments/assets/092c12c7-64cd-481e-9b77-ab891f036bbc" />
+<img width="1340" alt="Screenshot 2025-01-09 143606" src="https://github.com/user-attachments/assets/7da5c6d0-ce59-48e9-bc6d-423d2151125f" />
