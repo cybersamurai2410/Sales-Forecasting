@@ -128,10 +128,13 @@ curl -X POST http://<public_ip>/forecast_sales \
 ]
 ```
 
-## CI/CD Workflow
-**Continuous Integration:**
-
-**Continuous Deployment:**
+## Continuous Integration and Continuous Deployment (CI/CD) GitHub Actions Workflow
+* Automated Testing
+* Steps
+* AWS Infrastructure 
+* Docker Image 
+* Secrets Management
+* Monitoring
 
 ## MLflow UI
 <img width="1115" alt="Screenshot 2025-01-09 143431" src="https://github.com/user-attachments/assets/5a6dd112-1480-44c7-95aa-376b566810a3" />
