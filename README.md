@@ -129,12 +129,15 @@ curl -X POST http://<public_ip>/forecast_sales \
 ```
 
 ## Continuous Integration and Continuous Deployment (CI/CD) GitHub Actions Workflow
-* Automated Testing
-* Steps
-* AWS Infrastructure 
-* Docker Image 
-* Secrets Management
-* Monitoring
+* **Automated Testing** - Ensures the code is functional and meets quality standards by running unit tests before deployment. This is handled in the `test` job, where dependencies are installed and tests are executed using `pytest`. If the tests fail, the workflow halts, preventing defective code from being deployed.
+* **Steps** - Organizes the workflow into sequential jobs to handle testing, infrastructure provisioning and deployment in an orderly manner. The workflow is divided into three jobs; `test`, `deploy-infra`, and `build-and-deploy`. Each job depends on the success of the previous one to ensure proper execution.
+* **AWS Infrastructure** - Automates the creation and updating of AWS resources for deploying the application and supporting MLOps workflows. The `deploy-infra` job runs the `infra.py` and `mlflow_infra.py` scripts to provision or update AWS resources like ECS, ECR, S3, and EC2 using the Boto3 library.
+* **Docker Image** - Packages the application and its dependencies into a container for consistent deployment across environments. The `build-and-deploy` job builds the Docker image, tags it with the current commit SHA (secure hashing algorithm), pushes it to AWS ECR and updates the AWS ECS with the new image.
+* **Secrets Management** - Protects sensitive data like AWS credentials from being exposed in the repository. AWS credentials are stored in GitHub Secrets (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`) and accessed securely in the `deploy-infra` and `build-and-deploy` jobs.
+* **Monitoring** - Ensures system reliability and performance by tracking application metrics and logs using AWS CloudWatch handled via AWS console.
+
+## Further Work
+
 
 ## MLflow UI
 <img width="1115" alt="Screenshot 2025-01-09 143431" src="https://github.com/user-attachments/assets/5a6dd112-1480-44c7-95aa-376b566810a3" />
