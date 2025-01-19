@@ -128,9 +128,13 @@ curl -X POST http://<public_ip>/forecast_sales \
 ]
 ```
 
+## CI/CD Workflow
+**Continuous Integration:**
+
+**Continuous Deployment:**
+
 ## MLflow UI
 <img width="1115" alt="Screenshot 2025-01-09 143431" src="https://github.com/user-attachments/assets/5a6dd112-1480-44c7-95aa-376b566810a3" />
-<img width="1357" alt="Screenshot 2025-01-09 143242" src="https://github.com/user-attachments/assets/4c40be8f-94d9-4d0f-ac46-f8fa529b67ad" />
 <img width="1354" alt="Screenshot 2025-01-09 143355" src="https://github.com/user-attachments/assets/fce1eddf-6b45-40c7-9fc4-ca248a2a74a6" />
 <img width="1321" alt="Screenshot 2025-01-09 143459" src="https://github.com/user-attachments/assets/bfa796be-ac6c-4677-a46e-65e6af930fa0" />
 <img width="1344" alt="Screenshot 2025-01-09 143533" src="https://github.com/user-attachments/assets/092c12c7-64cd-481e-9b77-ab891f036bbc" />
