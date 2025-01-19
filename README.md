@@ -137,7 +137,7 @@ curl -X POST http://<public_ip>/forecast_sales \
 * **Monitoring** - Ensures system reliability and performance by tracking application metrics and logs using AWS CloudWatch handled via AWS console.
 
 ## Further Work
-
+Future enhancements for this project include implementing data drift detection using evaluation metrics to monitor model performance and automatically trigger retraining workflows in the ML pipeline, ensuring models remain accurate over time. Transitioning from SQLite to a scalable MySQL database hosted on AWS RDS for storing datasets would better accommodate larger datasets and support efficient querying. Incorporating Kubernetes for container orchestration could enhance scalability and improve deployment reliability. Expanding the CI/CD pipeline to include integration tests would ensure robust interactions between system components such as API endpoints, databases, MLflow tracking and model inference. These enhancements aim to optimize automation, scalability and the overall reliability of the system.
 
 ## MLflow UI
 <img width="1115" alt="Screenshot 2025-01-09 143431" src="https://github.com/user-attachments/assets/5a6dd112-1480-44c7-95aa-376b566810a3" />
